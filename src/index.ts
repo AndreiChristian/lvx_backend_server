@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import { Server, Socket } from "socket.io";
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
+app.use(express.json() as RequestHandler);
 
 app.use("/api", propertiesRouter);
 app.use("/api", facilitiesRouter);
