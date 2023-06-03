@@ -17,6 +17,7 @@ import profileFacilityRouter from "./routes/profile_facility";
 import facilityCategoryRouter from "./routes/facilities_category";
 import facilitySubcategoryRouter from "./routes/facilities_subcategory";
 import authRouter from "./routes/auth";
+import { hostname } from "os";
 
 dotenv.config();
 
@@ -53,7 +54,9 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ message: "it works" });
 });
 
-const server = app.listen(8080);
+const port = process.env.PORT || 3000;
+
+const server = app.listen(+port, "0.0.0.0", () => {});
 
 const io = websocket.init(server);
 
