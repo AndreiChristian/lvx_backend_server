@@ -1,4 +1,4 @@
-import express, { RequestHandler } from "express";
+import express, { Request, RequestHandler, Response } from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import { Server, Socket } from "socket.io";
@@ -48,6 +48,10 @@ app.use("/api", facilityCategoryRouter);
 app.use("/api", facilitySubcategoryRouter);
 
 app.use("/auth", authRouter);
+
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "it works" });
+});
 
 const server = app.listen(8080);
 
