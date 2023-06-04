@@ -24,7 +24,7 @@ export const getPropertiesList = async (
 ) => {
   try {
     const { rows } = await db.query(
-      `SELECT p.id, p.name AS name, r.name AS region
+      `SELECT p.id, p.image_url ,p.name AS name, r.name AS region
     FROM properties AS p
     LEFT JOIN regions as r ON p.region_id = r.id`,
       []
