@@ -51,17 +51,22 @@ export const getOneProperty = async (
   try {
     const { rows } = await db.query(
       `SELECT property.id,
-    property.name AS name,
-    property.price,
-    property.description,
-    region.name AS region,
-    address.city,
-    address.street,
-    address.number
-FROM properties AS property
-    JOIN regions As region ON property.region_id = region.id
-    JOIN addresses AS address ON property.address_id = address.id
-WHERE property.id = $1`,
+      property.name AS name,
+      property.price,
+      property.image_url,
+      property.description,
+      region.name AS region,
+      address.city,
+      address.street,
+      address.number,
+      property.bathrooms,
+      property.bedrooms,
+      property.square_meters,
+      property.max_capacity
+  FROM properties AS property
+      JOIN regions As region ON property.region_id = region.id
+      JOIN addresses AS address ON property.address_id = address.id
+  WHERE property.id = $1`,
       [propertyId]
     );
 
