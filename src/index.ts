@@ -56,7 +56,9 @@ app.get("/", (req: Request, res: Response) => {
 
 const port = process.env.PORT || 3000;
 
-const server = app.listen(+port, "0.0.0.0", () => {});
+const server = app.listen(+port, "0.0.0.0", () => {
+  console.log("running on port", port);
+});
 
 const io = websocket.init(server);
 

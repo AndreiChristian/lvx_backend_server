@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { db } from "../db";
-import { compare } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 
 const router = Router();
 
@@ -33,4 +33,54 @@ router.post(
   }
 );
 
+router.post(
+  "/signup",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {
+        first_name,
+        last_name,
+        password,
+        email,
+        phone_number,
+        street,
+        number,
+        zip,
+        city,
+        state,
+        country,
+      } = req.body;
+
+      const addressResponse = await db.query(
+        `INSERT INTO addresses (street, number, zip, city, country)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *`,
+        [street, number, zip, city, country]
+      );
+
+      if (addressResponse.rows.length === 0) {
+        throw new Error("Could not create address");
+      }
+
+      const address_id = addressResponse.rows[0].id!;
+
+      const password_hash = await hash(password, 10);
+      const userResponse = await db.query(
+        `INSERT INTO guests (first_name, last_name, email, phone_number, password_hash, address_id)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+        [first_name, last_name, email, phone_number, password_hash, address_id]
+      );
+
+      if (userResponse.rows.length === 0) {
+        throw new Error("Could not create new user");
+      }
+
+      res.json(userResponse.rows);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+  }
+);
 export default router;

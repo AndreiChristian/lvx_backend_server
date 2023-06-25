@@ -45,15 +45,24 @@ export const postReservation = async (
     start_date,
     end_date,
     adults,
-    kids,
+    children,
     status,
+    creator_id,
     total_price,
   } = req.body;
 
   try {
     const { rows } = await db.query(
-      `INSERT INTO reservations (property_id, start_date, end_date, adults, kids, status, total_price) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING * `,
-      [property_id, start_date, end_date, adults, kids, status, total_price]
+      `INSERT INTO reservations (property_id, start_date, end_date, adults, children, total_price, creator_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING * `,
+      [
+        property_id,
+        start_date,
+        end_date,
+        adults,
+        children,
+        total_price,
+        creator_id,
+      ]
     );
 
     if (!rows[0]) {
