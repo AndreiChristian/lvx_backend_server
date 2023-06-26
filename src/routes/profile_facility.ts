@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   deleteProfileFacility,
+  getFacilityByProfile,
   getOneProfileFacility,
   getProfileFacilityList,
   patchProfileFacility,
@@ -10,6 +11,7 @@ import {
 const router = Router();
 
 router.get("/profile_facility", getProfileFacilityList);
+router.get("/profile_facility/:profileId", getFacilityByProfile);
 router.get("/profile_facility/:profileId/:facilityId", getOneProfileFacility);
 router.post("/profile_facility", postProfileFacility);
 router.patch("/profile_facility/:profileId/:facilityId", patchProfileFacility);

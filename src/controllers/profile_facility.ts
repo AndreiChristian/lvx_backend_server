@@ -38,6 +38,38 @@ export const getOneProfileFacility = async (
     next(err);
   }
 };
+
+export const getFacilityByProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { profileId } = req.params;
+
+    const { rows } = await db.query(
+      `SELECT f.*
+    FROM profile_facilities as p
+        JOIN facilities as f ON p.facility_id = f.id
+    WHERE p.profile_id = $1`,
+      [profileId]
+    );
+
+    if (!rows) {
+      throw new Error("error with the db");
+    }
+
+    if (!rows[0]) {
+      res.json([]);
+    } else {
+      res.json(rows);
+    }
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 export const postProfileFacility = async (
   req: Request,
   res: Response,
@@ -87,13 +119,20 @@ export const deleteProfileFacility = async (
   next: NextFunction
 ) => {
   try {
-    const { rows } = await db.query("", []);
+    const { profileId, facilityId } = req.params;
 
-    if (!rows[0]) {
-      throw new Error("error with the db");
+    const result = await db.query(
+      `DELETE FROM profile_facilities
+    WHERE profile_id = $1
+        AND facility_id = $2;`,
+      [profileId, facilityId]
+    );
+
+    if (result.rowCount === 0) {
+      throw new Error("No rows were deleted");
     }
 
-    res.json(rows);
+    res.json({ message: "Success" });
   } catch (err) {
     console.log(err);
     next(err);

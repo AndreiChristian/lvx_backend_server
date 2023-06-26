@@ -76,6 +76,11 @@ router.post(
         throw new Error("Could not create new user");
       }
 
+      await db.query(
+        "INSERT INTO profiles ( first_name, last_name, guest_id ) VALUES ($1, $2, $3) RETURNING *",
+        [first_name, last_name, userResponse.rows[0].id]
+      );
+
       res.json(userResponse.rows);
     } catch (err) {
       console.error(err);

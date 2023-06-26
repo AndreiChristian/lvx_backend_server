@@ -20,17 +20,41 @@ export const getProfilesList = async (
   }
 };
 
+export const getProfilesByGuestId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { guestId } = req.params;
+
+    const { rows } = await db.query(
+      "SELECT * FROM profiles WHERE guest_id = $1",
+      [guestId]
+    );
+
+    if (!rows[0]) {
+      throw new Error("no profiles");
+    }
+
+    res.json(rows);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 export const postProfile = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { first_name, last_name, phone_number, email, guest_id } = req.body;
+    const { first_name, last_name, guest_id } = req.body;
 
     const { rows } = await db.query(
-      "INSERT INTO profiles (email, updated_at, first_name, last_name, phone_number, guest_id ) VALUES ($1,CURRENT_TIMESTAMP,$2, $3, $4, $5) RETURNING *",
-      [email, first_name, last_name, phone_number, guest_id]
+      "INSERT INTO profiles ( first_name, last_name, guest_id ) VALUES ($1,$2, $3) RETURNING *",
+      [first_name, last_name, guest_id]
     );
 
     if (!rows[0]) {

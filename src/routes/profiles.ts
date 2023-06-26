@@ -1,9 +1,15 @@
 import { Router } from "express";
-import { getProfilesList, postProfile } from "../controllers/profiles";
+import {
+  getProfilesByGuestId,
+  getProfilesList,
+  postProfile,
+} from "../controllers/profiles";
 
 const router = Router();
 
 router.get("/profiles", getProfilesList);
+
+router.get("/profiles/:guestId", getProfilesByGuestId);
 
 router.post("/profiles", postProfile);
 
