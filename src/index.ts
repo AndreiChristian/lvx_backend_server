@@ -17,7 +17,7 @@ import profileFacilityRouter from "./routes/profile_facility";
 import facilityCategoryRouter from "./routes/facilities_category";
 import facilitySubcategoryRouter from "./routes/facilities_subcategory";
 import authRouter from "./routes/auth";
-import { hostname } from "os";
+import reservationProfilesRoutes from "./routes/reservation_profiles";
 
 dotenv.config();
 
@@ -47,6 +47,7 @@ app.use("/api", reservationsRouter);
 app.use("/api", profileFacilityRouter);
 app.use("/api", facilityCategoryRouter);
 app.use("/api", facilitySubcategoryRouter);
+app.use("/api", reservationProfilesRoutes);
 
 app.use("/auth", authRouter);
 
